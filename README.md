@@ -27,7 +27,7 @@ Output is a text file (extension `.subtrees` that lists every leaf of a phylpgen
 
 Training a subtree classifier model
 ------------
-To generate subtrees for a phylogeny with number of leaves > 4000 the user can execure divide_tree command:
+To train a classifier model user can use the following command:
 ```
  python main.py train_classifier -input_dir $INPUT_DIR -subtrees $FILE.subtrees -e 2000 -o $OUTPUT_DIR
 ```
@@ -35,4 +35,17 @@ To generate subtrees for a phylogeny with number of leaves > 4000 the user can e
 $INPUT_DIR is an input directory that should contain k-mer frequency count file for backbone species in .kf format (output of get_frequencies command). $FILE.subtrees is the file where each input genome has an assigned subtree number. -e number of epochs (default is 4000). $OUTPUT_DIR is the directory where classifier model will be saved once training is complete.
 ###### Output: 
 Output is a classifier model called `classifier_model.ckpt` stored in a user definied repository.
+
+Classification of queries into subtrees
+------------
+To generate subtrees for a phylogeny with number of leaves > 4000 the user can execure divide_tree command:
+```
+ python main.py classify -input_dir $INPUT_DIR -model $MODEL_DIR  -o $OUTPUT_DIR
+```
+###### Input: 
+$INPUT_DIR is an input directory that should contain k-mer frequency count file for query species in .kf format (output of get_frequencies command). $MODEL_DIR is the folder where model named `classifier_model.ckpt` is located. $OUTPUT_DIR is the directory where `classes.out` will be stored. 
+###### Output: 
+Output is `classes.out` tab delimited file stored in a user definied repository. File contains information about each query sequence, assigned subtree number and probability values for top as well as all other classes.
+
+
 
