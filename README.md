@@ -25,7 +25,7 @@ This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to b
 ###### Output: 
 Output is a text file (extension `.subtrees` that lists every leaf of a phylpgeny and its corresponding subtree number.
 
-Split phylogeny into subtrees 
+Training a subtree classifier model
 ------------
 To generate subtrees for a phylogeny with number of leaves > 4000 the user can execure divide_tree command:
 ```
