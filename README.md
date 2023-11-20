@@ -17,7 +17,7 @@ Split phylogeny into subtrees
 ------------
 To generate subtrees for a phylogeny with number of leaves > 4000 the user can execure divide_tree command:
 ```
- python main.py divide_tree -size $SUBTREE_SIZE -tree tree $INPUT_PHYLOGENY
+ python main.py divide_tree -size $SUBTREE_SIZE -tree $INPUT_PHYLOGENY
 ```
 ###### Input: 
 $INPUT_PHYLOGENY is an input phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. -size parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. 
@@ -47,13 +47,13 @@ $INPUT_DIR is an input directory that should contain k-mer frequency count file 
 ###### Output: 
 Output is `classes.out` tab delimited file stored in a user definied repository. File contains information about each query sequence, assigned subtree number and probability values for top as well as all other classes.
 
-Ground truth distance matric computation 
+Ground truth distance matrix computation 
 ------------
-To generate subtrees for a phylogeny with number of leaves > 4000 the user can execure divide_tree command:
+To compute distance matrix for backbone phylogeny:
 ```
-python main.py get_distances -tree /Users/nora/PycharmProjects/test_tree.nwk  -subtrees  /Users/nora/PycharmProjects/my_test.subtrees
+python main.py get_distances -tree $INPUT_PHYLOGENY  -subtrees $FILE.subtrees -mode [hybrid or subtrees_only]
 ```
 ###### Input: 
-$INPUT_DIR is an input directory that should contain k-mer frequency count file for query species in .kf format (output of get_frequencies command). $MODEL_DIR is the folder where model named `classifier_model.ckpt` is located. $OUTPUT_DIR is the directory where `classes.out` will be stored. 
+$INPUT_PHYLOGENY is an input phylogenetic tree in .newick/.nwk format. $FILE.subtrees is the file where each input genome has an assigned subtree number. 
 ###### Output: 
-Output is `classes.out` tab delimited file stored in a user definied repository. File contains information about each query sequence, assigned subtree number and probability values for top as well as all other classes.
+Output is will be saved in a directory where phylogeny is located.
