@@ -1,0 +1,50 @@
+
+==> Input arguments...
+
+Query directory: /Users/nora/PycharmProjects/test_tree_kf
+Model directory: /Users/nora/PycharmProjects/my_toy_input
+Class information: /Users/nora/PycharmProjects/my_toy_input
+
+==> Querying...
+
+Total subtrees to query: 2
+
+==> Working on subtree 0...
+
+
+==> Preparing Data...
+
+Dimensions of feature matrix rows: 1, cols: 8192
+
+==> Building model...
+
+
+==> Compute model output...
+
+Dimensions of output matrix rows:1 cols:2
+
+==> Computation is complete for subtree 0!
+
+Time: 00:00:00
+
+==> Working on subtree 1...
+
+
+==> Preparing Data...
+
+Dimensions of feature matrix rows: 5, cols: 8192
+
+==> Building model...
+
+
+==> Compute model output...
+
+Dimensions of output matrix rows:5 cols:3
+
+==> Computation is complete for subtree 1!
+
+Time: 00:00:00
+
+==> Computation Completed!
+
+Time: 00:00:00
