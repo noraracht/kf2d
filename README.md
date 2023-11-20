@@ -57,3 +57,22 @@ python main.py get_distances -tree $INPUT_PHYLOGENY  -subtrees $FILE.subtrees -m
 $INPUT_PHYLOGENY is an input phylogenetic tree in .newick/.nwk format. $FILE.subtrees is the file where each input genome has an assigned subtree number. 
 ###### Output: 
 Output is will be saved in a directory where phylogeny is located.
+
+Train models for subtrees
+------------
+To train:
+```
+python main.py train_model_set -input_dir $INPUT_DIR  -true_dist $TRUE_DIST_MATRIX_DIR  -subtrees $FILE.subtrees -e 4000 -o $OUTPUT_DIR
+```
+###### Input: 
+$INPUT_DIR is an input directory that should contain k-mer frequency count file for backbone species in .kf format (output of get_frequencies command). $FILE.subtrees is the file where each input genome has an assigned subtree number. -e number of epochs (default is 4000). $OUTPUT_DIR is the directory where `models_subtree_INDEX.ckpt` will be stored. 
+###### Output: 
+Output is a set of trained models for each input subtree.
+
+Query subtree models
+------------
+To query models:
+```
+python main.py query -input_dir $INPUT_DIR  -model $MODEL_DIR  -classes classes.out  -o $OUTPUT_DIR
+```
+
