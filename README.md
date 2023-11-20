@@ -38,7 +38,7 @@ Output is a classifier model called `classifier_model.ckpt` stored in a user def
 
 Classification of queries into subtrees
 ------------
-To generate subtrees for a phylogeny with number of leaves > 4000 the user can execure divide_tree command:
+Command to classify query sequences into subtrees:
 ```
  python main.py classify -input_dir $INPUT_DIR -model $MODEL_DIR  -o $OUTPUT_DIR
 ```
@@ -47,5 +47,13 @@ $INPUT_DIR is an input directory that should contain k-mer frequency count file 
 ###### Output: 
 Output is `classes.out` tab delimited file stored in a user definied repository. File contains information about each query sequence, assigned subtree number and probability values for top as well as all other classes.
 
-
-
+Ground truth distance matric computation 
+------------
+To generate subtrees for a phylogeny with number of leaves > 4000 the user can execure divide_tree command:
+```
+python main.py get_distances -tree /Users/nora/PycharmProjects/test_tree.nwk  -subtrees  /Users/nora/PycharmProjects/my_test.subtrees
+```
+###### Input: 
+$INPUT_DIR is an input directory that should contain k-mer frequency count file for query species in .kf format (output of get_frequencies command). $MODEL_DIR is the folder where model named `classifier_model.ckpt` is located. $OUTPUT_DIR is the directory where `classes.out` will be stored. 
+###### Output: 
+Output is `classes.out` tab delimited file stored in a user definied repository. File contains information about each query sequence, assigned subtree number and probability values for top as well as all other classes.
