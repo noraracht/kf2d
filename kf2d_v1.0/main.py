@@ -355,7 +355,7 @@ def main():
                                        description='Process a library of reference genome-skims or assemblies')
     parser_freq.add_argument('-input_dir',
                             help='Directory of input genomes or assemblies (dir of .fastq/.fq/.fa/.fna/.fasta files)')
-    parser_freq.add_argument('-k', type=int, choices=list(range(6, 7)), default=7, help='K-mer length [6-7]. ' +
+    parser_freq.add_argument('-k', type=int, choices=list(range(6, 8)), default=7, help='K-mer length [6-7]. ' +
                                                                                          'Default: 7', metavar='K')
     parser_freq.add_argument('-p', type=int, choices=list(range(1, mp.cpu_count() + 1)), default=mp.cpu_count(),
                             help='Max number of processors to use [1-{0}]. '.format(mp.cpu_count()) +
