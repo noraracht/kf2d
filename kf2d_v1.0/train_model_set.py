@@ -81,13 +81,13 @@ params = {'batch_size': batch_size,
 
 
 
-def train_model_set_func(features_folder, features_csv, clades_info, true_dist_matrix, num_epochs, model_filepath):
+def train_model_set_func(features_folder, features_csv, clades_info, true_dist_matrix, num_epochs, hidden_size_fc1, model_filepath):
 
     since = time.time()
 
     level = logging.INFO
     format = '%(message)s'
-    handlers = [logging.FileHandler('run.log', 'w+'), logging.StreamHandler()]
+    handlers = [logging.FileHandler(os.path.join(model_filepath, 'run.log'), 'w+'), logging.StreamHandler()]
 
     #logging.basicConfig(level=logging.NOTSET, format='%(asctime)s | %(levelname)s: %(message)s', handlers=handlers)
 

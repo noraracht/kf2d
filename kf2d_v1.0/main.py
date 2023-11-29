@@ -305,7 +305,7 @@ def train_model_set(args):
     frame.set_index(0, inplace=True)
 
 
-    train_model_set_func(args.input_dir, frame, args.subtrees, args.true_dist, args.e, args.o)
+    train_model_set_func(args.input_dir, frame, args.subtrees, args.true_dist, args.e, args.hidden_size, args.o)
 
 
 
@@ -452,6 +452,9 @@ def main():
                                help='Classification file with subtrees information obtained from divide_tree command (a .subtrees format)')
     parser_train_model_set.add_argument('-e', type=int, choices=list(range(1, 20001)), default=4000, help='Epochs [1-20000]. ' +
                                                                                                  'Default: 4000')
+
+    parser_train_model_set.add_argument('-hidden_size', type=int, choices=list(range(1, 20001)), default=2048, help='Hidden size [1-20000]. ' + 'Default: 2048')
+
     parser_train_model_set.add_argument('-o',
                                help='Model output path/filename prefix')
 
