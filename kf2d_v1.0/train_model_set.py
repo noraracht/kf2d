@@ -167,13 +167,12 @@ def train_model_set_func(features_folder, features_csv, clades_info, true_dist_m
         logging.info("Dimensions of feature matrix rows: {}, cols: {}".format(np.shape(feature_input)[0], np.shape(feature_input)[1]))
 
         # #######################################################################
-
         # Get names
         backbone_names = feature_input.index.tolist()
 
         #######################################################################
 
-
+        # Create mapping dictionaries
         #feature_input = read_feat_mtrx(dataset_features)  # read from dataframe (1000 columns, normalized)
         label_idx_dict, idx_label_dict = get_label_idx_maps(feature_input)    # convert first column into dict
 
@@ -194,7 +193,7 @@ def train_model_set_func(features_folder, features_csv, clades_info, true_dist_m
         #logging.info(pdf_sorted)
 
 
-
+        #######################################################################
         # Prepare train/test dataset split
         partition = {}
         partition['train'] = backbone_names
@@ -407,11 +406,18 @@ def train_model_set_func(features_folder, features_csv, clades_info, true_dist_m
 
 
         #### Output embeddings ####
-        pairwise_outputs3 = torch.square(train_dist)
+        model.eval()
+
+        with torch.no_grad():
+            outputs = model(torch.from_numpy(feature_input.values).float())
+
 
         # Detach gradient and convert to numpy
+        train_dist = pairwise_train_dist(outputs)
+        pairwise_outputs3 = torch.square(train_dist)
         df_outputs = pd.DataFrame(pairwise_outputs3.detach().numpy())
         df_embeddings = pd.DataFrame(outputs.detach().numpy())
+
 
         # Attach species names
         df_outputs.columns = backbone_names
@@ -428,9 +434,6 @@ def train_model_set_func(features_folder, features_csv, clades_info, true_dist_m
         time_elapsed = time.time() - since
         hrs, _min, sec = hms(time_elapsed)
         logging.info('Time: {:02d}:{:02d}:{:02d}'.format(hrs, _min, sec))
-
-
-
 
 
 

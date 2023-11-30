@@ -54,6 +54,7 @@ from train_classifier_model import *
 from classify import *
 from train_model_set import *
 from query import *
+from train_forked_model import *
 
 # def print_hi(name):
 #     # Use a breakpoint in the code line below to debug your script.
@@ -326,6 +327,27 @@ def query(args):
     query_func(args.input_dir, frame, args.model, args.classes, args.o)
 
 
+
+def train_forked_model(args):
+
+    # Concetenate kmer frequencies into single dataframe
+    all_files = glob.glob(os.path.join(args.input_dir, "*.kf"))
+
+    li = []
+
+    for filename in all_files:
+        df = pd.read_csv(filename, index_col=None, header=None, sep= ',')
+        li.append(df)
+
+
+    frame = pd.concat(li, axis=0, ignore_index=True)
+    frame.set_index(0, inplace=True)
+
+    print("Train forked model")
+    train_forked_model_func(args.input_dir, frame, args.subtrees, args.true_dist, args.e, args.hidden_size, args.o)
+
+
+
 def main():
     # Input arguments parser
     parser = argparse.ArgumentParser(description=' K-mer frequency to distance',
@@ -341,6 +363,8 @@ def main():
                                                    # 'train_model     Performs correction of subsampled distance matrices obtained for reference\n'
                                                    'train_model_set     Trains all models for subtrees consecutively\n'
                                                    'query     Query subtree models\n'
+                                                   'train_forked_model     Trains single forked model\n'
+                                                   'query_forked_model     Query forked models\n'
                                                    # ' genome-skims or assemblies'
                                        ,
                                        help='Run skmer {commands} [-h] for additional help',
@@ -452,7 +476,6 @@ def main():
                                help='Classification file with subtrees information obtained from divide_tree command (a .subtrees format)')
     parser_train_model_set.add_argument('-e', type=int, choices=list(range(1, 20001)), default=4000, help='Epochs [1-20000]. ' +
                                                                                                  'Default: 4000')
-
     parser_train_model_set.add_argument('-hidden_size', type=int, choices=list(range(1, 20001)), default=2048, help='Hidden size [1-20000]. ' + 'Default: 2048')
 
     parser_train_model_set.add_argument('-o',
@@ -479,6 +502,32 @@ def main():
                                         help='Model output path/filename prefix')
 
     parser_query.set_defaults(func=query)
+
+
+
+    # Train_model_set command subparser
+
+    ### To invoke
+    ### python main.py train_forked_model -input_dir /Users/nora/PycharmProjects/train_tree_kf  -true_dist /Users/nora/PycharmProjects  -subtrees /Users/nora/PycharmProjects/my_test.subtrees -e 1 -o /Users/nora/PycharmProjects/my_toy_input
+
+    parser_train_forked_model = subparsers.add_parser('train_forked_model',
+                                                   description='Trains single forked models for entire set')
+    parser_train_forked_model.add_argument('-input_dir',
+                                        help='Directory of input k-mer frequencies for assemblies or reads (dir of .kf files for backbone)')
+    parser_train_forked_model.add_argument('-true_dist',
+                                        help='Directory of distamce matrices for backbone subtrees (dir of *subtree_INDEX.di_mtrx files for backbone)')
+    parser_train_forked_model.add_argument('-subtrees',
+                                        help='Classification file with subtrees information obtained from divide_tree command (a .subtrees format)')
+    parser_train_forked_model.add_argument('-e', type=int, choices=list(range(1, 20001)), default=4000,
+                                        help='Epochs [1-20000]. ' +
+                                             'Default: 4000')
+    parser_train_forked_model.add_argument('-hidden_size', type=int, choices=list(range(1, 20001)), default=2048,
+                                        help='Hidden size [1-20000]. ' + 'Default: 2048')
+
+    parser_train_forked_model.add_argument('-o',
+                                        help='Model output path/filename prefix')
+
+    parser_train_forked_model.set_defaults(func=train_forked_model)
 
 
     args = parser.parse_args()
