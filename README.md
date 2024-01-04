@@ -23,7 +23,7 @@ To generate subtrees for a phylogeny with number of leaves > 4000 the user can e
 $INPUT_PHYLOGENY is an input phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. -size parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. 
 This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to be installed as a dependancy.
 ###### Output: 
-Output is a text file (extension `.subtrees` that lists every leaf of a phylpgeny and its corresponding subtree number.
+Output is a text file (extension `.subtrees` that lists every leaf of a phylogeny and its corresponding subtree number.
 
 Training a subtree classifier model
 ------------
