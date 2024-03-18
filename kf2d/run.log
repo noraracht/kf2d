@@ -1,0 +1,38 @@
+
+==> Input arguments...
+
+Feature directory: /Users/nora/PycharmProjects/train_tree_kf
+Clades information: /Users/nora/PycharmProjects/my_test.subtrees
+
+==> Parameters...
+
+GPU Support: No
+Hidden Size fc1: 2048
+Embedding Size: 1024
+Starting Epoch: 0
+Total Epochs: 1
+Batch Size: 16
+Random Seed: 16
+
+==> Preparing Data...
+
+Dimensions of feature matrix rows: 5, cols: 8192
+Number of Train Samples: 5
+
+==> Building model...
+
+Number of Classes: 2
+
+==> Model parameters----------
+Total parameters: 16783362
+Trainable parameters: 16783362
+Time: 00:00:00
+
+==> Training model...
+
+Epoch [1/1], Step [1/1], Train loss: 0.89806079864501953125, 0.59999999999999997780, Time: 00:00:08
+Epoch 1	               LR:0.00001000000000000000
+
+==> Training Completed!
+
+Time: 00:00:08
