@@ -194,6 +194,9 @@ def query_func(features_folder, features_csv, model_file, classes, output_folder
         pairwise_outputs2 = torch.square(pairwise_outputs)
         pairwise_outputs3 = torch.div(pairwise_outputs2, 1.0) # NEED TO FIX BUT GOOD FOR Current TEST
 
+        # Round distances < 1e10-6 to 0 so apples can handle such values
+        pairwise_outputs3 = torch.where(pairwise_outputs3 < 1.0e-6, torch.tensor(0, dtype=pairwise_outputs3.dtype),
+                                        pairwise_outputs3)
 
         #######################################################################
         # Compute distance matrix for entire set
