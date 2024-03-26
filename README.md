@@ -29,7 +29,7 @@ It's a wraper function that consequtively runs computation of k-mer frequences f
 ```
 ###### Input: 
 **$INPUT_DIR** is an input directory that should contain genome sequences in .fastq/.fq/.fa/.fna/.fasta format. Optional parameter is **-k** which is a k-mer length, set to 7 by default. Obviously k-mer length for backbone and query sequences should be the same. This command requires [Jellyfish](https://github.com/gmarcais/Jellyfish) to be installed as a dependancy. Optional parameter is **-p** corresponds to number of processors that Jellyfish can utilize to preprocess input sequences.
-**-classifier_model** corresponds to directory where classifier model is stored and **--distance_model** is a location of distance models. If used in combination with `build_library` function all model files should be preserved in the same user specified output directory.
+**-classifier_model** corresponds to directory where classifier model is stored and **-distance_model** is a location of distance models. If used in combination with `build_library` all model files should be preserved in the same output directory precified in `build_library` command.
 ###### Output: 
 All output files from this command are stored in **$OUTPUT_DIR**. 
 
@@ -57,19 +57,19 @@ To generate subtrees for a phylogeny with number of leaves > 4000 the user can e
  python main.py divide_tree -size $SUBTREE_SIZE -tree $INPUT_PHYLOGENY
 ```
 ###### Input: 
-$INPUT_PHYLOGENY is an input phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. -size parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. 
+**$INPUT_PHYLOGENY** is an input phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. **-size** parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. 
 This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to be installed as a dependancy.
 ###### Output: 
-Output is a text file (extension `.subtrees` that lists every leaf of a phylogeny and its corresponding subtree number.
+Output is a text file (extension `.subtrees`) that lists every leaf of a phylogeny and its corresponding subtree number.
 
 Ground truth distance matrix computation 
 ------------
 To compute distance matrix for backbone phylogeny:
 ```
-python main.py get_distances -tree $INPUT_PHYLOGENY  -subtrees $FILE.subtrees -mode [hybrid, subtrees_only]
+python main.py get_distances -tree $INPUT_PHYLOGENY  -subtrees $FILE.subtrees -mode [full_only, hybrid, subtrees_only]
 ```
 ###### Input: 
-$INPUT_PHYLOGENY is an input phylogenetic tree in .newick/.nwk format. $FILE.subtrees is the file where each input genome has an assigned subtree number. 
+$INPUT_PHYLOGENY is an input phylogenetic tree in .newick/.nwk format. $FILE.subtrees is the file where each input genome has an assigned subtree number. **-mode** parameter can take values full_only, hybrid (default), subtrees_only and specifies whether distance matrices should be computed only for a full backbone tree, subtrees or both. This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to be installed as a dependancy. 
 ###### Output: 
 Output is will be saved in a directory where phylogeny is located.
 
