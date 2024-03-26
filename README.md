@@ -2,9 +2,6 @@
 # kf2d
 <!-- k-mer frequency to distance-->
 
-Wrapper commands
----
-
 Combination function to perform backbone preprocessing and training classifier and distance models 
 ------------
 It's a wraper function that consequtively runs computation of k-mer frequences for backbone sequences, splits backbone tree into subtrees and produce corresponding true distance matrices as well as trains classifier and distance models. 
@@ -26,9 +23,9 @@ This command generates normalized k-mer frequencies for every entry in the **$IN
 
 Combination function to perform query preprocessing, classification and distance computation
 ------------
-It's a wraper function that consequtively runs computation of k-mer frequences for backbone sequences, splits backbone tree into subtrees and produce corresponding true distance matrices as well as trains classifier and distance models. 
+It's a wraper function that consequtively runs computation of k-mer frequences for query sequences, classifies query into subtress and computes distances between queries and a corresponding backbone sequences in a subtree.
 ```
- python main.py build_library -input_dir $INPUT_DIR -output_dir $OUTPUT_DIR -size 800 -tree $INPUT_PHYLOGENY -mode subtrees_only -cl_epochs 1 -di_epochs 1
+ python main.py process_query_data -input_dir $INPUT_DIR  -output_dir $OUTPUT_DIR -classifier_model $CL_MODEL_DIR -distance_model $DI_MODEL_DIR
 ```
 ###### Input: 
 **$INPUT_DIR** is an input directory that should contain genome sequences in .fastq/.fq/.fa/.fna/.fasta format. Optional parameter is **-k** which is a k-mer length, set to 7 by default. This command requires [Jellyfish](https://github.com/gmarcais/Jellyfish) to be installed as a dependancy. Optional parameter is **-p** corresponds to number of processors that Jellyfish can utilize to preprocess input sequences.
