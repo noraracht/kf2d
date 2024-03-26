@@ -17,7 +17,7 @@ Next set of optional parameters are dealing with conditions for training classif
 
 Final set of optional parameters are related to conditions for training distance model. These parametrs are equivalent to parameters used by `train_model_set` function. Thus --di_epochs specifies maximum number of training epochs (default is 8000), -di_hidden_size is a dimension of hidden layer in the model, -di_batch_sz identifies batch size (default values is 16), -di_lr, -di_lr_min and -di_lr_decay refer to starting learning rate, minimum allowed learning rate and learning rate decay values. We suggest to keep learning rate related paramaters at their default values unless user has a specific need to modify them.
 ###### Output: 
-This command generates normalized k-mer frequencies for every entry in the $INPUT_DIR. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`.
+All output files from this command are stored in $OUTPUT_DIR. This command generates normalized k-mer frequencies for every entry in the $INPUT_DIR. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`. Next this command will compute subtrees (file with extension `.subtrees` that lists every leaf of a phylogeny and its corresponding subtree number) and corresponding true distance matrices (files named $PREFIX_subtree_$SUBTREE_NUM.di_mtrx). 
 
 Extracting k-mer frequencies
 ------------
