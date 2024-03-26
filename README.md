@@ -23,7 +23,7 @@ All output files from this command are stored in **$OUTPUT_DIR**.
 
 This command generates normalized k-mer frequencies for every entry in the **$INPUT_DIR**. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`. Next this command will compute subtrees (file with extension `.subtrees` that lists every leaf of a phylogeny and its corresponding subtree number) and corresponding true distance matrices (files named `$PREFIX_subtree_$SUBTREE_NUM.di_mtrx`). Output includes a classifier model called `classifier_model.ckpt` and distance models for every subtree.
 
-Combination function to perform backbone preprocessing and training classifier and distance models 
+Combination function to perform query preprocessing, classification and distance computation
 ------------
 It's a wraper function that consequtively runs computation of k-mer frequences for backbone sequences, splits backbone tree into subtrees and produce corresponding true distance matrices as well as trains classifier and distance models. 
 ```
