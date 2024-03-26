@@ -10,8 +10,10 @@ It's a wraper function that consequtively runs computation of k-mer frequences f
 ###### Input: 
 $INPUT_DIR is an input directory that should contain genome sequences in .fastq/.fq/.fa/.fna/.fasta format. Optional parameter is -k which is a k-mer length, set to 7 by default. 
 This command requires [Jellyfish](https://github.com/gmarcais/Jellyfish) to be installed as a dependancy. Optional parameter is -p corresponds to number of processors that Jellyfish can utilize to preprocess input sequences.
-$INPUT_PHYLOGENY is an input backbone phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. -size parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. -mode parameter can take values full_only, hybrid (default), subtrees_only and specify whether distance matrices should be computed only for a full backbone tree, subtrees or both. This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to be installed as a dependancy.
-Next set of optional parameters are specifying conditions for training classifier model. 
+
+$INPUT_PHYLOGENY is an input backbone phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. -size parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. -mode parameter can take values full_only, hybrid (default), subtrees_only and specifies whether distance matrices should be computed only for a full backbone tree, subtrees or both. This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to be installed as a dependancy.
+
+Next set of optional parameters are dealing with conditions for training classifier model. These parametrs are equivalent to parameters used by `train_classifier` function. Thus 
 ###### Output: 
 This command generates normalized k-mer frequencies for every entry in the $INPUT_DIR. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`.
 
