@@ -39,6 +39,14 @@ Output includes results of classification and distance computation. Thus `classe
 
 ## Main commands
 
+To get version number of invoke help
+------------
+To obtain version number or invoke description of commands:
+```
+ python main.py --version
+ python main.py --help
+```
+
 Extracting k-mer frequencies
 ------------
 To obtain k-mer frequencies for backbone species and a query set the user can execute the get_frequencies command:
