@@ -28,17 +28,13 @@ It's a wraper function that consequtively runs computation of k-mer frequences f
  python main.py process_query_data -input_dir $INPUT_DIR  -output_dir $OUTPUT_DIR -classifier_model $CL_MODEL_DIR -distance_model $DI_MODEL_DIR
 ```
 ###### Input: 
-**$INPUT_DIR** is an input directory that should contain genome sequences in .fastq/.fq/.fa/.fna/.fasta format. Optional parameter is **-k** which is a k-mer length, set to 7 by default. This command requires [Jellyfish](https://github.com/gmarcais/Jellyfish) to be installed as a dependancy. Optional parameter is **-p** corresponds to number of processors that Jellyfish can utilize to preprocess input sequences.
-
-**$INPUT_PHYLOGENY** is an input backbone phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. **-size** parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. **-mode** parameter can take values full_only, hybrid (default), subtrees_only and specifies whether distance matrices should be computed only for a full backbone tree, subtrees or both. This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to be installed as a dependancy.
-
-Next set of optional parameters are dealing with conditions for training classifier model. These parametrs are equivalent to parameters used by `train_classifier` function. Thus **-cl_epochs** specifies maximum number of training epochs (default is 2000), **-cl_batch_sz** identifies batch size (default values is 16), **-cl_lr**, **-cl_lr_min** and **-cl_lr_decay** refer to starting learning rate, minimum allowed learning rate and learning rate decay values. We suggest to keep learning rate paramaters at their default values unless user has a specific need to modify them.
-
-Final set of optional parameters are related to conditions for training distance model. These parametrs are equivalent to parameters used by `train_model_set` function. Thus **-di_epochs** specifies maximum number of training epochs (default is 8000), **-di_hidden_size** is a dimension of hidden layer in the model, **-di_batch_sz** identifies batch size (default values is 16), **-di_lr**, **-di_lr_min** and **-di_lr_decay** refer to starting learning rate, minimum allowed learning rate and learning rate decay values. We suggest to keep learning rate paramaters at their default values unless user has a specific need to modify them.
+**$INPUT_DIR** is an input directory that should contain genome sequences in .fastq/.fq/.fa/.fna/.fasta format. Optional parameter is **-k** which is a k-mer length, set to 7 by default. Obviously k-mer length for backbone and query sequences should be the same. This command requires [Jellyfish](https://github.com/gmarcais/Jellyfish) to be installed as a dependancy. Optional parameter is **-p** corresponds to number of processors that Jellyfish can utilize to preprocess input sequences.
+**-classifier_model** corresponds to directory where classifier model is stored and **--distance_model** is a location of distance models. If used in combination with `build_library` function all model files should be preserved in the same user specified output directory.
 ###### Output: 
 All output files from this command are stored in **$OUTPUT_DIR**. 
 
-This command generates normalized k-mer frequencies for every entry in the **$INPUT_DIR**. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`. Next this command will compute subtrees (file with extension `.subtrees` that lists every leaf of a phylogeny and its corresponding subtree number) and corresponding true distance matrices (files named `$PREFIX_subtree_$SUBTREE_NUM.di_mtrx`). Output includes a classifier model called `classifier_model.ckpt` and distance models for every subtree.
+Output includes results of classification and distance computation. Thus `classes.out` tab delimited file contains information about each query sequence, assigned subtree number and probability values for top as well as all other classes. Distance values are summarized in as query per backbone sequences distance matrix for each subtree.
+
 
 
 ## Main commands
