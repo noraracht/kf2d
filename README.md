@@ -121,7 +121,7 @@ To query models:
 python main.py query -input_dir $INPUT_DIR  -model $MODEL_DIR  -classes $CLASSES_DIR -o $OUTPUT_DIR
 ```
 ###### Input: 
-**$INPUT_DIR** is an input directory that should contain k-mer frequency count file for query species in .kf format (output of get_frequencies command). **$MODEL_DIR** is the folder where model named `classifier_model.ckpt` is located. **$CLASSES_DIR** is the directory where `classes.out` is located. **$OUTPUT_DIR** is the directory where `apples_input_di_mtrx_query_INDEX.csv` will be stored. 
+**$INPUT_DIR** is an input directory that should contain k-mer frequency count file for query species in .kf format (output of get_frequencies command). **$MODEL_DIR** is the folder where model named `models_subtree_INDEX.ckpt` is located. **$CLASSES_DIR** is the directory where `classes.out` is located. **$OUTPUT_DIR** is the directory where `apples_input_di_mtrx_query_INDEX.csv` will be stored. 
 ###### Output: 
 Output is a query per backbone sequences distance matrix for subtrees.
 
