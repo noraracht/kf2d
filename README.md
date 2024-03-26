@@ -19,7 +19,7 @@ Final set of optional parameters are related to conditions for training distance
 ###### Output: 
 All output files from this command are stored in **$OUTPUT_DIR**. 
 
-This command generates normalized k-mer frequencies for every entry in the **$INPUT_DIR**. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`. Next this command will compute subtrees (file with extension `.subtrees` that lists every leaf of a phylogeny and its corresponding subtree number) and corresponding true distance matrices (files named `$PREFIX_subtree_$SUBTREE_NUM.di_mtrx`). Output includes a classifier model called `classifier_model.ckpt` and distance models for every subtree.
+This command generates normalized k-mer frequencies for every entry in the **$INPUT_DIR**. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`. Next this command will compute subtrees (file with extension `.subtrees` that lists every leaf of a phylogeny and its corresponding subtree number) and corresponding true distance matrices (files named `*subtree_INDEX.di_mtrx`). Output includes a classifier model called `classifier_model.ckpt` and distance models for every subtree.
 
 Combination function to perform query preprocessing, classification and distance computation
 ------------
