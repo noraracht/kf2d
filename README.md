@@ -39,7 +39,7 @@ Output includes results of classification and distance computation. Thus `classe
 
 ## Main commands
 
-To get version number of invoke help
+Version number and help
 ------------
 To obtain version number or invoke description of commands:
 ```
@@ -88,7 +88,7 @@ To train a classifier model user can use the following command:
  python main.py train_classifier -input_dir $INPUT_DIR -subtrees $FILE.subtrees -e 2000 -o $OUTPUT_DIR
 ```
 ###### Input: 
-**$INPUT_DIR** is an input directory that should contain k-mer frequency count file for backbone species in `.kf` format (output of get_frequencies command). **$FILE.subtrees** is the file where each input genome has an assigned target subtree number. *-e* number of epochs (default is 2000). **$OUTPUT_DIR** is the directory where classifier model will be saved once training is complete.
+**$INPUT_DIR** is an input directory that should contain k-mer frequency count file for backbone species in `.kf` format (output of get_frequencies command). **$FILE.subtrees** is the file where each input genome has an assigned target subtree number.Optional model training parameters include: **-e** number of epochs (default is 2000) and **-batch_sz** identifies batch size (default values is 16). **-lr**, **-lr_min** and **-lr_decay** refer to starting learning rate, minimum allowed learning rate and learning rate decay values. We suggest to keep learning rate paramaters at their default values unless user has a specific need to modify them.  **$OUTPUT_DIR** is the directory where classifier model will be saved once training is complete. 
 ###### Output: 
 Output is a classifier model called `classifier_model.ckpt` stored in a user definied output repository.
 
@@ -110,9 +110,9 @@ To train:
 python main.py train_model_set -input_dir $INPUT_DIR  -true_dist $TRUE_DIST_MATRIX_DIR  -subtrees $FILE.subtrees -e 4000 -o $OUTPUT_DIR
 ```
 ###### Input: 
-$INPUT_DIR is an input directory that should contain k-mer frequency count file for backbone species in .kf format (output of get_frequencies command). $FILE.subtrees is the file where each input genome has an assigned subtree number. -e number of epochs (default is 4000). $OUTPUT_DIR is the directory where `models_subtree_INDEX.ckpt` will be stored. 
+**$INPUT_DIR** is an input directory that should contain k-mer frequency count file for backbone species in `.kf` format (output of get_frequencies command). **$TRUE_DIST_MATRIX_DIR** is a directory where true distance matrices are located (location where `*subtree_INDEX.di_mtrx` files are). **$FILE.subtrees** is the file where each input genome has an assigned subtree number. Model training parameters include: **-e** number of epochs (default is 8000), **-hidden_size** is a dimension of hidden layer in the model, **-batch_sz** identifies batch size (default values is 16). **-lr**, **-lr_min** and **-lr_decay** refer to starting learning rate, minimum allowed learning rate and learning rate decay values. We suggest to keep learning rate paramaters at their default values unless user has a specific need to modify them.
 ###### Output: 
-Output is a set of trained models for each input subtree.
+Output is a set of trained models for each input subtree. $OUTPUT_DIR is the directory where `models_subtree_INDEX.ckpt` will be stored. 
 
 Query subtree models
 ------------
