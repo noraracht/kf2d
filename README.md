@@ -2,7 +2,7 @@
 # kf2d
 <!-- k-mer frequency to distance-->
 
-## Wrapper commands
+Wrapper commands
 ---
 
 Combination function to perform backbone preprocessing and training classifier and distance models 
