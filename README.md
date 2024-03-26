@@ -1,6 +1,20 @@
 # kf2d
 <!-- k-mer frequency to distance-->
 
+Combination function to perform backbone preprocessing and training classifier and distance models 
+------------
+It's a wraper function that consequtively runs computation of k-mer frequences for backbone sequences, splits backbone tree into subtrees and produce corresponding true distance matrices as well as trains classifier and distance models. 
+```
+ python main.py build_library -input_dir $INPUT_DIR -output_dir $OUTPUT_DIR -size 800 -tree $INPUT_PHYLOGENY -mode subtrees_only -cl_epochs 1 -di_epochs 1
+```
+###### Input: 
+$INPUT_DIR is an input directory that should contain genome sequences in .fastq/.fq/.fa/.fna/.fasta format. Optional parameter is -k which is a k-mer length, set to 7 by default. 
+This command requires [Jellyfish](https://github.com/gmarcais/Jellyfish) to be installed as a dependancy. Optional parameter is -p corresponds to number of processors that Jellyfish can utilize to preprocess input sequences.
+$INPUT_PHYLOGENY is an input backbone phylogenetic tree in .newick/.nwk format that should be split into multiple smaller subtrees. -size parameteter is the user spacified subtree size. We set -size default to 850 but in practice we recommend user to define it. -mode parameter can take values full_only, hybrid (default), subtrees_only and specify whether distance matrices should be computed only for a full backbone tree, subtrees or both. This command requires [TreeCluster](https://github.com/niemasd/TreeCluster) to be installed as a dependancy.
+Next set of optional parameters are specifying conditions for training classifier model. 
+###### Output: 
+This command generates normalized k-mer frequencies for every entry in the $INPUT_DIR. For every entry it outputs corresponding single file (comma delimited) with extention `.kf`.
+
 Extracting k-mer frequencies
 ------------
 To obtain k-mer frequencies for backbone species and a query set the user can execute the get_frequencies command:
