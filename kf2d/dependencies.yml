@@ -1,4 +1,4 @@
-name: oop_test4
+name: kf2d
 channels:
   - bioconda
   - pytorch
