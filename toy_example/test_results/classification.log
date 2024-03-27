@@ -1,0 +1,21 @@
+
+==> Input arguments...
+
+Feature directory: ../toy_example/test_kf
+Model: ../toy_example/train_tree_models
+
+==> Preparing Data...
+
+Dimensions of feature matrix rows: 3, cols: 8192
+
+==> Building model...
+
+Number of Classes: 2
+
+==> Compute model output...
+
+Dimensions of class output rows:3 cols:5
+
+==> Classification Completed!
+
+Time: 00:00:00
