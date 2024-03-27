@@ -1,0 +1,42 @@
+
+==> Input arguments...
+
+Feature directory: ../toy_example/train_tree_kf
+Clades information: ../toy_example/train_tree_newick/train_tree.subtrees
+
+==> Parameters...
+
+GPU Support: No
+Hidden Size fc1: 2048
+Starting Epoch: 0
+Total Epochs: 1
+Batch Size: 16
+Learning Rate: 1e-05
+Learning Rate Min: 3e-06
+Learning Rate Decay: 2000
+Random Seed: 16
+
+==> Preparing Data...
+
+Dimensions of feature matrix rows: 5, cols: 8192
+Number of Train Samples: 5
+
+==> Building model...
+
+Number of Classes: 2
+
+==> Model parameters----------
+Total parameters: 16783362
+Trainable parameters: 16783362
+Time: 00:00:00
+
+==> Training model...
+
+Epoch [1/1], Step [1/1], Train loss: 0.89806079864501953125, 0.59999999999999997780, Time: 00:00:08
+Epoch 1	               LR:0.00001000000000000000
+Best Epoch [1/1], Lowest loss: 0.89806079864501953125, Highest accuracy: 0.59999999999999997780
+Dimensions of class output rows:5 cols:6
+
+==> Training Completed!
+
+Time: 00:00:08

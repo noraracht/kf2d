@@ -1,0 +1,85 @@
+
+==> Input arguments...
+
+Feature directory: ../toy_example/train_tree_kf
+Clades information: ../toy_example/train_tree_newick/train_tree.subtrees
+Ground truth directory: ../toy_example/train_tree_newick
+
+==> Parameters...
+
+GPU Support: No
+Hidden Size fc1: 2048
+Embedding Size: 1024
+Starting Epoch: 0
+Total Epochs: 1
+Batch Size: 16
+Learning Rate: 1e-05
+Learning Rate Min: 3e-06
+Learning Rate Decay: 2000
+Random Seed: 16
+
+==> Subtree training...
+
+Number of Classes: 2
+
+==> Working on subtree 0...
+
+
+==> Preparing Data...
+
+Dimensions of feature matrix rows: 2, cols: 8192
+Dimensions of true distance matrix rows: 2, cols: 2
+Number of Train Samples: 2
+
+==> Building model...
+
+
+==> Model parameters----------
+Total parameters: 18877440
+Trainable parameters: 18877440
+Time: 00:00:00
+
+==> Training model...
+
+Epoch [1/1], Step [1/1], Train loss: 0.02751594076792628421, Time: 00:00:09
+Epoch 1	                   LR:0.00001000000000000000
+Best Epoch [1/1], Lowest loss: 0.02751594076792628421
+Dimensions of distortion matrix rows:2 cols:3
+Dimensions of embedding output rows:2 cols:1025
+
+==> Training for subtree 0 completed!
+
+Time: 00:00:09
+
+==> Working on subtree 1...
+
+
+==> Preparing Data...
+
+Dimensions of feature matrix rows: 3, cols: 8192
+Dimensions of true distance matrix rows: 3, cols: 3
+Number of Train Samples: 3
+
+==> Building model...
+
+
+==> Model parameters----------
+Total parameters: 18877440
+Trainable parameters: 18877440
+Time: 00:00:09
+
+==> Training model...
+
+Epoch [1/1], Step [1/1], Train loss: 0.02859274419354492294, Time: 00:00:17
+Epoch 1	                   LR:0.00001000000000000000
+Best Epoch [1/1], Lowest loss: 0.02859274419354492294
+Dimensions of distortion matrix rows:3 cols:4
+Dimensions of embedding output rows:3 cols:1025
+
+==> Training for subtree 1 completed!
+
+Time: 00:00:17
+
+==> Training Completed!
+
+Time: 00:00:17
