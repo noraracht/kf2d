@@ -167,7 +167,7 @@ python main.py get_distances -tree ../toy_example/train_tree_newick/train_tree.n
 ```
 3. To train classifier model:
 ```
-python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1 -o ../toy_example/train_tree_models
+python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 10 -o ../toy_example/train_tree_models
 ```
 4. To classify query sequences:
 ```
