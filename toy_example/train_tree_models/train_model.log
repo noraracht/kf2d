@@ -41,7 +41,7 @@ Time: 00:00:00
 
 ==> Training model...
 
-Epoch [1/1], Step [1/1], Train loss: 0.02751594076792628421, Time: 00:00:09
+Epoch [1/1], Step [1/1], Train loss: 0.02751594076792628421, Time: 00:00:08
 Epoch 1	                   LR:0.00001000000000000000
 Best Epoch [1/1], Lowest loss: 0.02751594076792628421
 Dimensions of distortion matrix rows:2 cols:3
@@ -49,7 +49,7 @@ Dimensions of embedding output rows:2 cols:1025
 
 ==> Training for subtree 0 completed!
 
-Time: 00:00:09
+Time: 00:00:08
 
 ==> Working on subtree 1...
 
@@ -66,7 +66,7 @@ Number of Train Samples: 3
 ==> Model parameters----------
 Total parameters: 18877440
 Trainable parameters: 18877440
-Time: 00:00:09
+Time: 00:00:08
 
 ==> Training model...
 
