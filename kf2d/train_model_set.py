@@ -71,12 +71,14 @@ seed = 16
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
-#torch.backends.cudnn.benchmark = False
-#torch.backends.cudnn.deterministic = True
+# torch.backends.cudnn.benchmark = False
+# torch.backends.cudnn.deterministic = True
+# np.random.seed(seed)
 
 
 def train_model_set_func(features_folder, features_csv, clades_info, true_dist_matrix, num_epochs, hidden_size_fc1, embedding_size, in_batch_sz, in_lr, in_lr_min, in_lr_decay, model_filepath):
 
+    #### Dataset parameters ####
     params = {'batch_size': in_batch_sz,
               'shuffle': True,
               'num_workers': 1}

@@ -50,8 +50,9 @@ seed = 16
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
-#torch.backends.cudnn.benchmark = False
-#torch.backends.cudnn.deterministic = True
+# torch.backends.cudnn.benchmark = False
+# torch.backends.cudnn.deterministic = True
+# np.random.seed(seed)
 
 
 def query_func(features_folder, features_csv, model_file, classes, output_folder):
@@ -164,7 +165,7 @@ def query_func(features_folder, features_csv, model_file, classes, output_folder
         embeddings_tensor = torch.from_numpy(df_embeddings.values).float()
         pairwise_outputs = torch.cdist(outputs, embeddings_tensor, p=2, compute_mode='donot_use_mm_for_euclid_dist')
         pairwise_outputs2 = torch.square(pairwise_outputs)
-        pairwise_outputs3 = torch.div(pairwise_outputs2, 100.0) # NEED TO FIX BUT GOOD FOR Current TEST
+        pairwise_outputs3 = torch.div(pairwise_outputs2, 1.0) # NEED TO FIX BUT GOOD FOR Current TEST
 
         # Round distances < 1e10-6 to 0 so apples can handle such values
         pairwise_outputs3 = torch.where(pairwise_outputs3 < 1.0e-6, torch.tensor(0, dtype=pairwise_outputs3.dtype),
