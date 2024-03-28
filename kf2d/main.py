@@ -571,8 +571,8 @@ def main():
     ### To invoke
     ### python main.py train_classifier -input_dir /Users/nora/PycharmProjects/train_tree_kf -subtrees /Users/nora/PycharmProjects/my_test.subtrees -e 1 -o /Users/nora/PycharmProjects/my_toy_input
 
-    ### python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1 -o ../toy_example/train_tree_models
-    ### python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1  -hidden_sz 2000 -batch_sz 32 -o ../toy_example/train_tree_models
+    ### python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 10 -o ../toy_example/train_tree_models
+    ### python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 10  -hidden_sz 2000 -batch_sz 32 -o ../toy_example/train_tree_models
 
     parser_trclas = subparsers.add_parser('train_classifier',
                                         description='Train classifier model based on backbone subtrees')
@@ -685,6 +685,7 @@ def main():
 
     ### To invoke
     ### python main.py build_library -input_dir /Users/nora/PycharmProjects/train_tree_fna -output_dir /Users/nora/PycharmProjects/train_tree_output -size 2 -tree /Users/nora/PycharmProjects/test_tree.nwk -mode subtrees_only -cl_epochs 1 -di_epochs 1
+    ###
 
     parser_build_library = subparsers.add_parser('build_library',
                                                    description='Wrapper command that combines subcommands: get_frequencies (from backbone sequences), divide_tree, get_distance, train_classifier and train_model_set')
