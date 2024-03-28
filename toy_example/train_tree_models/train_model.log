@@ -70,7 +70,7 @@ Time: 00:00:08
 
 ==> Training model...
 
-Epoch [1/1], Step [1/1], Train loss: 0.02859274419354492294, Time: 00:00:17
+Epoch [1/1], Step [1/1], Train loss: 0.02859274419354492294, Time: 00:00:16
 Epoch 1	                   LR:0.00001000000000000000
 Best Epoch [1/1], Lowest loss: 0.02859274419354492294
 Dimensions of distortion matrix rows:3 cols:4

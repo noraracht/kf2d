@@ -9,7 +9,7 @@ Clades information: ../toy_example/train_tree_newick/train_tree.subtrees
 GPU Support: No
 Hidden Size fc1: 2048
 Starting Epoch: 0
-Total Epochs: 1
+Total Epochs: 10
 Batch Size: 16
 Learning Rate: 1e-05
 Learning Rate Min: 3e-06
@@ -32,11 +32,29 @@ Time: 00:00:00
 
 ==> Training model...
 
-Epoch [1/1], Step [1/1], Train loss: 0.89806079864501953125, 0.59999999999999997780, Time: 00:00:08
+Epoch [1/10], Step [1/1], Train loss: 0.89806079864501953125, 0.59999999999999997780, Time: 00:00:09
 Epoch 1	               LR:0.00001000000000000000
-Best Epoch [1/1], Lowest loss: 0.89806079864501953125, Highest accuracy: 0.59999999999999997780
+Epoch [2/10], Step [1/1], Train loss: 0.62095600366592407227, 0.40000000000000002220, Time: 00:00:17
+Epoch 2	               LR:0.00001300000000000000
+Epoch [3/10], Step [1/1], Train loss: 0.43911284208297729492, 0.59999999999999997780, Time: 00:00:25
+Epoch 3	               LR:0.00001300000000000000
+Epoch [4/10], Step [1/1], Train loss: 0.28389936685562133789, 1.00000000000000000000, Time: 00:00:34
+Epoch 4	               LR:0.00001300000000000000
+Epoch [5/10], Step [1/1], Train loss: 0.18014359474182128906, 1.00000000000000000000, Time: 00:00:42
+Epoch 5	               LR:0.00001300000000000000
+Epoch [6/10], Step [1/1], Train loss: 0.13137406110763549805, 1.00000000000000000000, Time: 00:00:50
+Epoch 6	               LR:0.00001300000000000000
+Epoch [7/10], Step [1/1], Train loss: 0.10611943900585174561, 1.00000000000000000000, Time: 00:00:59
+Epoch 7	               LR:0.00001300000000000000
+Epoch [8/10], Step [1/1], Train loss: 0.08469056338071823120, 1.00000000000000000000, Time: 00:01:07
+Epoch 8	               LR:0.00001300000000000000
+Epoch [9/10], Step [1/1], Train loss: 0.06487796455621719360, 1.00000000000000000000, Time: 00:01:16
+Epoch 9	               LR:0.00001300000000000000
+Epoch [10/10], Step [1/1], Train loss: 0.04891238361597061157, 1.00000000000000000000, Time: 00:01:24
+Epoch 10	               LR:0.00001300000000000000
+Best Epoch [10/10], Lowest loss: 0.04891238361597061157, Highest accuracy: 1.00000000000000000000
 Dimensions of class output rows:5 cols:6
 
 ==> Training Completed!
 
-Time: 00:00:08
+Time: 00:01:24
