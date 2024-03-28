@@ -148,6 +148,8 @@ python main.py query -input_dir $INPUT_DIR  -model $MODEL_DIR  -classes $CLASSES
 ###### Output: 
 Output is a query per backbone sequences distance matrix for subtrees.
 
+TOY EXAMPLE
+-----------
 
 User can test workflow on the following toy example:
 ------------
