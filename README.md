@@ -22,6 +22,9 @@ conda activate kf2d
 
 Below, we assume you are in the `kf2d` directory of the repository. This will be fixed in the future. 
 
+COMMANDS
+-----------
+
 Combination function to perform backbone preprocessing and training classifier and distance models 
 ------------
 It's a wraper function that consequtively runs computation of k-mer frequences for backbone sequences, splits backbone tree into subtrees and produce corresponding true distance matrices as well as trains classifier and distance models. 
