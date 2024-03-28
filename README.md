@@ -145,3 +145,35 @@ python main.py query -input_dir $INPUT_DIR  -model $MODEL_DIR  -classes $CLASSES
 ###### Output: 
 Output is a query per backbone sequences distance matrix for subtrees.
 
+
+User can test workflow on the following toy example:
+------------
+While located in code directory
+
+1. To extract k-mer frequencies from backbone and query sequences:
+```
+python main.py get_frequencies -input_dir ../toy_example/train_tree_fna -output_dir ../toy_example/train_tree_kf
+python main.py get_frequencies -input_dir ../toy_example/test_fna -output_dir ../toy_example/test_kf
+```
+2. To split tree into subtrees and compute ground truth distance matrices:
+```
+python main.py divide_tree -tree ../toy_example/train_tree_newick/train_tree.nwk -size 2
+python main.py get_distances -tree ../toy_example/train_tree_newick/train_tree.nwk  -subtrees  ../toy_example/train_tree_newick/train_tree.subtrees -mode subtrees_only
+```
+3. To train classifier model:
+```
+python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1 -o ../toy_example/train_tree_models
+```
+4. To classify query sequences:
+```
+python main.py classify -input_dir ../toy_example/test_kf -model ../toy_example/train_tree_models -o ../toy_example/test_results
+```
+5. To train distance models:
+```
+python main.py train_model_set -input_dir ../toy_example/train_tree_kf -true_dist ../toy_example/train_tree_newick  -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1 -o ../toy_example/train_tree_models
+```
+6. To compute distances from backbone to query sequences:
+```
+python main.py query -input_dir ../toy_example/test_kf  -model ../toy_example/train_tree_models -classes ../toy_example/test_results  -o ../toy_example/test_results
+```
+
