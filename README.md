@@ -151,7 +151,7 @@ Output is a query per backbone sequences distance matrix for subtrees.
 TOY EXAMPLE
 -----------
 
-User can test workflow on the following toy example:
+To test step by step workflow on toy dataset:
 ------------
 While located in code directory
 
@@ -181,4 +181,17 @@ python main.py train_model_set -input_dir ../toy_example/train_tree_kf -true_dis
 ```
 python main.py query -input_dir ../toy_example/test_kf  -model ../toy_example/train_tree_models -classes ../toy_example/test_results  -o ../toy_example/test_results
 ```
+
+To test wrapper functions on toy dataset:
+------------
+While located in code directory
+1. To preprocess data and train models:
+```
+python main.py build_library -input_dir ../toy_example/train_tree_fna -output_dir ../toy_example/combo_models -size 2 -tree ../toy_example/train_tree_newick/train_tree.nwk -mode subtrees_only -cl_epochs 10 -di_epochs 1
+```
+2. To preprocess queries and compute distances:
+```
+python main.py process_query_data -input_dir ../toy_example/test_fna -output_dir ../toy_example/combo_results   -classifier_model ../toy_example/combo_models -distance_model ../toy_example/combo_models
+```
+
 
