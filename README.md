@@ -7,9 +7,9 @@ INSTALLATION
 
 We plan to put this on bioconda. For now, you can 
 
-1. Clonde github repo
-2. navigate to the directory
-3. run:
+1. Clone github repo
+2. Navigate to the directory
+3. Run:
 
 ~~~bash 
 conda env create --file=kf2d/dependencies.yml
