@@ -55,17 +55,24 @@ from classify import *
 from train_model_set import *
 from query import *
 
+default_k_len = 7
+min_k_len = 3
+max_k_len = 10
+default_subtree_sz = 850
+
 hidden_size_fc1 = 2048
 embedding_size = 1024
 batch_size = 16
 
-learning_rate = 0.00001
-learning_rate_min = 3e-6
+default_cl_epochs = 2000
+default_di_epochs = 8000
+
+learning_rate = 0.00001     # 1e-5
+learning_rate_min = 3e-6    # 3e-6
 learning_rate_decay = 2000
 
 
-
-__version__ = 'kf2d 1.0.17'
+__version__ = 'kf2d 1.0.19'
 
 
 # def print_hi(name):
@@ -251,7 +258,7 @@ def train_classifier(args):
     # Concatenate inputs into single dataframe
     #frame = construct_input_dataframe(li)
 
-    train_classifier_model_func(args.input_dir, frame, args.subtrees, args.e, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.o)
+    train_classifier_model_func(args.input_dir, frame, args.subtrees, args.e, args.hidden_sz, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.o)
 
 
 def classify(args):
@@ -368,7 +375,7 @@ def train_model_set(args):
     # frame = construct_input_dataframe(li)
 
 
-    train_model_set_func(args.input_dir, frame, args.subtrees, args.true_dist, args.e, args.hidden_size, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.o)
+    train_model_set_func(args.input_dir, frame, args.subtrees, args.true_dist, args.e, args.hidden_sz, args.embed_sz, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.o)
 
 
 
@@ -418,6 +425,7 @@ def build_library(args):
     args.input_dir = args.output_dir
     # args.subtrees = args.subtrees # defined above
     args.e = args.cl_epochs
+    args.hidden_sz = args.cl_hidden_sz
     args.batch_sz = args.cl_batch_sz
     args.lr = args.cl_lr
     args.lr_min = args.cl_lr_min
@@ -432,7 +440,8 @@ def build_library(args):
     args.true_dist = head_tail[0]
     # args.subtrees = args.subtrees # defined above
     args.e = args.di_epochs
-    args.hidden_size = args.di_hidden_size
+    args.hidden_sz = args.di_hidden_sz
+    args.embed_sz = args.di_embed_sz
     args.batch_sz = args.di_batch_sz
     args.lr = args.di_lr
     args.lr_min = args.di_lr_min
@@ -483,9 +492,9 @@ def main():
     subparsers = parser.add_subparsers(title='commands',
                                        description='get_frequencies        Extract k-mer frequency from a reference genome-skims or assemblies\n'
                                                    'divide_tree            Divides input phylogeny into subtrees\n'
+                                                   'get_distances          Compute distance matrices\n'
                                                    'train_classifier       Train classifier model based on backbone subtrees\n'
                                                    'classify               Classifies query samples using previously trained classifier model\n'
-                                                   'get_distances           Compute distance matrices\n'
                                                    # 'train_model     Performs correction of subsampled distance matrices obtained for reference\n'
                                                    'train_model_set        Trains all models for subtrees consecutively\n'
                                                    'query                  Query subtree models\n'
@@ -496,11 +505,15 @@ def main():
                                        help='Run kf2d {commands} [-h] for additional help',
                                        dest='{commands}')
 
+
     # Get_frequencies command subparser
 
     ### To invoke
     ### python main.py get_frequencies -input_dir /Users/nora/PycharmProjects/test_freq -output_dir /Users/nora/PycharmProjects/test_freq
     ### python main.py get_frequencies -input_dir /Users/nora/PycharmProjects/test_freq -pseudocount
+
+    ### python main.py get_frequencies - input_dir.. / toy_example / train_tree_fna - output_dir.. / toy_example / train_tree_kf
+    ### python main.py get_frequencies -input_dir ../toy_example/test_fna -output_dir ../toy_example/test_kf
 
     parser_freq = subparsers.add_parser('get_frequencies',
                                        description='Process a library of reference genome-skims or assemblies')
@@ -508,8 +521,8 @@ def main():
                             help='Directory of input genomes or assemblies (dir of .fastq/.fq/.fa/.fna/.fasta files)')
     parser_freq.add_argument('-output_dir',
                              help='Directory for k-mer frequency outputs (dir for .kf files)')
-    parser_freq.add_argument('-k', type=int, choices=list(range(3, 11)), default=7, help='K-mer length [3-10]. ' +
-                                                                                         'Default: 7', metavar='K')
+    parser_freq.add_argument('-k', type=int, choices=list(range(min_k_len, max_k_len+1)), default=default_k_len, help='K-mer length [{}-{}]. '.format(min_k_len, max_k_len) +
+                                                                                         'Default: {}'.format(default_k_len), metavar='K')
     parser_freq.add_argument('-p', type=int, choices=list(range(1, mp.cpu_count() + 1)), default=mp.cpu_count(),
                             help='Max number of processors to use [1-{0}]. '.format(mp.cpu_count()) +
                                  'Default for this machine: {0}'.format(mp.cpu_count()), metavar='P')
@@ -518,19 +531,39 @@ def main():
     parser_freq.set_defaults(func=get_frequencies)
 
 
-
     # Divide_tree command subparser
 
     ### To invoke
     ### python main.py divide_tree -size 850 -tree /Users/nora/PycharmProjects/astral.rand.lpp.r100.EXTENDED.nwk
 
+    ### python main.py divide_tree -tree ../toy_example/train_tree_newick/train_tree.nwk -size 2
+
     parser_div = subparsers.add_parser('divide_tree',
                                        description='Divides input phylogeny into subtrees.')
     parser_div.add_argument('-tree', help='Input phylogeny (a .newick/.nwk format)')
-    parser_div.add_argument('-size', type=int, default=850, help='Size of the subtree. ' +
-                                                                                         'Default: 850')
+    parser_div.add_argument('-size', type=int, default=default_subtree_sz, help='Size of the subtree. ' +
+                                                                                         'Default: {}'.format(default_subtree_sz))
     parser_div.set_defaults(func=divide_tree)
 
+
+    # Get_distances command subparser
+
+    ### To invoke
+    ### python main.py get_distances -tree /Users/nora/PycharmProjects/test_tree.nwk  -subtrees  /Users/nora/PycharmProjects/my_test.subtrees -mode subtrees_only
+
+    ### python main.py get_distances -tree ../toy_example/train_tree_newick/train_tree.nwk  -subtrees  ../toy_example/train_tree_newick/train_tree.subtrees -mode subtrees_only
+
+    parser_distances = subparsers.add_parser('get_distances',
+                                             description='Computes distance matrices')
+    parser_distances.add_argument('-tree', help='Input phylogeny (a .newick/.nwk format)', required=True)
+    parser_distances.add_argument('-subtrees',
+                                  help='Classification file with subtrees information obtained from divide_tree command (a .subtrees format)')
+    parser_distances.add_argument('-mode', type=str, metavar='',
+                                  choices={"full_only", "hybrid", "subtrees_only"}, default="hybrid",
+                                  help='Ways to perform distance computation [full_only, hybrid, subtrees_only]. ' +
+                                       'Default: hybrid')
+
+    parser_distances.set_defaults(func=get_distances)
 
 
     # Train_classifier command subparser
@@ -538,28 +571,32 @@ def main():
     ### To invoke
     ### python main.py train_classifier -input_dir /Users/nora/PycharmProjects/train_tree_kf -subtrees /Users/nora/PycharmProjects/my_test.subtrees -e 1 -o /Users/nora/PycharmProjects/my_toy_input
 
+    ### python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1 -o ../toy_example/train_tree_models
+    ### python main.py train_classifier -input_dir ../toy_example/train_tree_kf -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1  -hidden_sz 2000 -batch_sz 32 -o ../toy_example/train_tree_models
+
     parser_trclas = subparsers.add_parser('train_classifier',
                                         description='Train classifier model based on backbone subtrees')
     parser_trclas.add_argument('-input_dir',
                              help='Directory of input k-mer frequencies for assemblies or reads (dir of .kf files for backbone)')
     parser_trclas.add_argument('-subtrees', help='Classification file with subtrees information obtained from divide_tree command (a .subtrees format)')
-    parser_trclas.add_argument('-e', type=int, metavar='', choices=list(range(1, 20001)), default=4000, help='Epochs [1-20000]. ' +
-                                                                                        'Default: 4000')
-    parser_trclas.add_argument('-batch_sz', type=int, metavar='', choices=list(range(1, 20001)), default=batch_size, help='Batch size [1-20000]. ' +
+    # parser_trclas.add_argument('-e', type=int, metavar='', choices=list(range(1, max_cl_epochs)), default=default_cl_epochs, help='Epochs [1-{}]. '.format(max_cl_epochs-1) +
+    #                                                                                     'Default: {}'.format(default_cl_epochs))
+    parser_trclas.add_argument('-e', type=int, default=default_cl_epochs, help='Number of epochs. ' +
+                                                                               'Default: {}'.format(default_cl_epochs))
+    parser_trclas.add_argument('-hidden_sz', type=int, default=hidden_size_fc1, help='Hidden size. ' +
+                                                                                       'Default: {}'.format(hidden_size_fc1))
+    parser_trclas.add_argument('-batch_sz', type=int, default=batch_size, help='Batch size. ' +
                                                                                         'Default: {}'.format(batch_size))
     parser_trclas.add_argument('-lr', type=float, default=learning_rate, help='Start learning rate. ' +
                                                                                         'Default: {}'.format(learning_rate))
     parser_trclas.add_argument('-lr_min', type=float, default=learning_rate_min, help='Minimum learning rate. ' +
                                                                                         'Default: {}'.format(learning_rate_min))
     parser_trclas.add_argument('-lr_decay', type=float, default=learning_rate_decay, help='Learning rate decay. ' +
-                                                                                      'Default: {}'.format(
-                                                                                          learning_rate_decay))
+                                                                                      'Default: {}'.format(learning_rate_decay))
     parser_trclas.add_argument('-o',
                                help='Model output path')
 
     parser_trclas.set_defaults(func=train_classifier)
-
-
 
 
     # Classify command subparser
@@ -567,6 +604,7 @@ def main():
     ### To invoke
     ### python main.py classify -input_dir /Users/nora/PycharmProjects/test_tree_kf -model /Users/nora/PycharmProjects/my_toy_input  -o /Users/nora/PycharmProjects/my_toy_input
 
+    ### python main.py classify -input_dir ../toy_example/test_kf -model ../toy_example/train_tree_models -o ../toy_example/test_results
 
     parser_classify = subparsers.add_parser('classify',
                                           description='Classifies query inputs using previously trained classifier model')
@@ -581,30 +619,13 @@ def main():
 
 
 
-    # Get_distances command subparser
-
-    ### To invoke
-    ### python main.py get_distances -tree /Users/nora/PycharmProjects/test_tree.nwk  -subtrees  /Users/nora/PycharmProjects/my_test.subtrees -mode subtrees_only
-
-    parser_distances = subparsers.add_parser('get_distances',
-                                            description='Computes distance matrices')
-    parser_distances.add_argument('-tree', help='Input phylogeny (a .newick/.nwk format)', required=True)
-    parser_distances.add_argument('-subtrees',
-                               help='Classification file with subtrees information obtained from divide_tree command (a .subtrees format)')
-    parser_distances.add_argument('-mode', type=str, metavar='',
-                                  choices={"full_only", "hybrid", "subtrees_only"}, default="hybrid",
-                                  help='Ways to perform distance computation [full_only, hybrid, subtrees_only]. ' +
-                                                                                        'Default: hybrid')
-
-
-    parser_distances.set_defaults(func=get_distances)
-
-
 
     # Train_model_set command subparser
 
     ### To invoke
     ### python main.py train_model_set -input_dir /Users/nora/PycharmProjects/train_tree_kf  -true_dist /Users/nora/PycharmProjects  -subtrees /Users/nora/PycharmProjects/my_test.subtrees -e 1 -o /Users/nora/PycharmProjects/my_toy_input
+
+    ### python main.py train_model_set -input_dir ../toy_example/train_tree_kf -true_dist ../toy_example/train_tree_newick  -subtrees ../toy_example/train_tree_newick/train_tree.subtrees -e 1 -o ../toy_example/train_tree_models
 
     parser_train_model_set = subparsers.add_parser('train_model_set',
                                             description='Trains individual models for each subtree')
@@ -614,20 +635,20 @@ def main():
                                         help='Directory of distamce matrices for backbone subtrees (dir of *subtree_INDEX.di_mtrx files for backbone)')
     parser_train_model_set.add_argument('-subtrees',
                                help='Classification file with subtrees information obtained from divide_tree command (a .subtrees format)')
-    parser_train_model_set.add_argument('-e', type=int, metavar='', choices=list(range(1, 20001)), default=4000, help='Epochs [1-20000]. ' +
-                                                                                                 'Default: 4000')
-    parser_train_model_set.add_argument('-hidden_size', type=int, metavar='', choices=list(range(1, 20001)), default=hidden_size_fc1, help='Hidden size [1-20000]. ' + 'Default: {}'.format(hidden_size_fc1))
-    parser_train_model_set.add_argument('-batch_sz', type=int, metavar='', choices=list(range(1, 20001)), default=batch_size,
-                               help='Batch size [1-20000]. ' +
-                                    'Default: {}'.format(batch_size))
+    parser_train_model_set.add_argument('-e', type=int, default=default_di_epochs, help='Number of epochs. ' +
+                                                                                                 'Default: {}'.format(default_di_epochs))
+    parser_train_model_set.add_argument('-hidden_sz', type=int, default=hidden_size_fc1, help='Hidden size. ' +
+                                                                                                'Default: {}'.format(hidden_size_fc1))
+    parser_train_model_set.add_argument('-embed_sz', type=int, default=embedding_size, help='Embedding size. ' +
+                                                                                                'Default: {}'.format(embedding_size))
+    parser_train_model_set.add_argument('-batch_sz', type=int, default=batch_size, help='Batch size. ' +
+                                                                            'Default: {}'.format(batch_size))
     parser_train_model_set.add_argument('-lr', type=float, default=learning_rate, help='Start learning rate. ' +
                                                                         'Default: {}'.format(learning_rate))
     parser_train_model_set.add_argument('-lr_min', type=float, default=learning_rate_min, help='Minimum learning rate. ' +
                                                                          'Default: {}'.format(learning_rate_min))
     parser_train_model_set.add_argument('-lr_decay', type=float, default=learning_rate_decay, help='Learning rate decay. ' +
-                                                                                          'Default: {}'.format(
-                                                                                              learning_rate_decay))
-
+                                                                                          'Default: {}'.format(learning_rate_decay))
     parser_train_model_set.add_argument('-o',
                                help='Model output path')
 
@@ -639,6 +660,8 @@ def main():
 
     ### To invoke
     ### python main.py query -input_dir /Users/nora/PycharmProjects/test_tree_kf  -model /Users/nora/PycharmProjects/my_toy_input  -classes /Users/nora/PycharmProjects/my_toy_input  -o /Users/nora/PycharmProjects/my_toy_input
+
+    ### python main.py query -input_dir ../toy_example/test_kf  -model ../toy_example/train_tree_models -classes ../toy_example/test_results  -o ../toy_example/test_results
 
     parser_query = subparsers.add_parser('query',
                                                    description='Query models')
@@ -670,8 +693,9 @@ def main():
                              help='Directory of input genomes or assemblies (dir of .fastq/.fq/.fa/.fna/.fasta files)')
     parser_build_library.add_argument('-output_dir',
                              help='Directory for all outputs (dir for .kf files)')
-    parser_build_library.add_argument('-k', type=int, choices=list(range(3, 11)), default=7, help='K-mer length [3-10]. ' +
-                                                                                         'Default: 7', metavar='K')
+    parser_build_library.add_argument('-k', type=int, choices=list(range(min_k_len, max_k_len + 1)), default=default_k_len,
+                             help='K-mer length [{}-{}]. '.format(min_k_len, max_k_len) +
+                                  'Default: {}'.format(default_k_len), metavar='K')
     parser_build_library.add_argument('-p', type=int, choices=list(range(1, mp.cpu_count() + 1)), default=mp.cpu_count(),
                              help='Max number of processors to use [1-{0}]. '.format(mp.cpu_count()) +
                                   'Default for this machine: {0}'.format(mp.cpu_count()), metavar='P')
@@ -679,48 +703,42 @@ def main():
                              help='Computes k-mer counts with 0.5 pseudocount added to each frequency value')
 
     parser_build_library.add_argument('-tree', help='Input phylogeny (a .newick/.nwk format)')
-    parser_build_library.add_argument('-size', type=int, default=850, help='Size of the subtree. ' +
-                                                                 'Default: 850')
+    parser_build_library.add_argument('-size', type=int, default=default_subtree_sz, help='Size of the subtree. ' +
+                                                                 'Default: {}'.format(default_subtree_sz))
 
     parser_build_library.add_argument('-mode', type=str, metavar='',
                                   choices={"full_only", "hybrid", "subtrees_only"}, default="hybrid",
                                   help='Ways to perform distance computation [full_only, hybrid, subtrees_only]. ' +
                                        'Default: hybrid')
 
-    parser_build_library.add_argument('-cl_epochs', type=int, metavar='', choices=list(range(1, 20001)), default=4000, help='Number of epochs to train classifier model [1-20000]. ' +
-                                                                                                 'Default: 4000')
-    parser_build_library.add_argument('-cl_batch_sz', type=int, metavar='', choices=list(range(1, 20001)), default=batch_size,
-                               help='Classifier batch size [1-20000]. ' +
-                                    'Default: {}'.format(batch_size))
+    parser_build_library.add_argument('-cl_epochs', type=int, default=default_cl_epochs, help='Number of epochs to train classifier model. ' +
+                                                               'Default: {}'.format(default_cl_epochs))
+    parser_build_library.add_argument('-cl_hidden_sz', type=int, default=hidden_size_fc1, help='Classifier hidden size. ' +
+                                                                                       'Default: {}'.format(hidden_size_fc1))
+    parser_build_library.add_argument('-cl_batch_sz', type=int, default=batch_size, help='Classifier batch size. ' +
+                                                                                         'Default: {}'.format(batch_size))
     parser_build_library.add_argument('-cl_lr', type=float, default=learning_rate, help='Classifier start learning rate. ' +
                                                                               'Default: {}'.format(learning_rate))
     parser_build_library.add_argument('-cl_lr_min', type=float, default=learning_rate_min, help='Classifier minimum learning rate. ' +
                                                                               'Default: {}'.format(learning_rate_min))
-    parser_build_library.add_argument('-cl_lr_decay', type=float, default=learning_rate_decay,
-                                        help='Classifier learning rate decay. ' +
-                                             'Default: {}'.format(
-                                                 learning_rate_decay))
+    parser_build_library.add_argument('-cl_lr_decay', type=float, default=learning_rate_decay, help='Classifier learning rate decay. ' +
+                                             'Default: {}'.format(learning_rate_decay))
 
 
-    parser_build_library.add_argument('-di_epochs', type=int, metavar='', choices=list(range(1, 20001)), default=4000,
-                                        help='Number of epochs to train distance models [1-20000]. ' +
-                                             'Default: 4000')
-    parser_build_library.add_argument('-di_hidden_size', type=int, metavar='', choices=list(range(1, 20001)), default=hidden_size_fc1,
-                                        help='Hidden size for distance models [1-20000]. ' + 'Default: {}'.format(hidden_size_fc1))
-    parser_build_library.add_argument('-di_batch_sz', type=int, metavar='', choices=list(range(1, 20001)),
-                                        default=batch_size,
-                                        help='Distance model batch size [1-20000]. ' +
+    parser_build_library.add_argument('-di_epochs', type=int, default=default_di_epochs, help='Number of epochs to train distance models. ' +
+                                                                        'Default: {}'.format(default_di_epochs))
+    parser_build_library.add_argument('-di_hidden_sz', type=int, default=hidden_size_fc1, help='Hidden size for distance models. ' +
+                                                                                                 'Default: {}'.format(hidden_size_fc1))
+    parser_build_library.add_argument('-di_embed_sz', type=int, default=embedding_size, help='Distance model embedding size. ' +
+                                                                                          'Default: {}'.format(embedding_size))
+    parser_build_library.add_argument('-di_batch_sz', type=int, default=batch_size, help='Distance model batch size. ' +
                                              'Default: {}'.format(batch_size))
     parser_build_library.add_argument('-di_lr', type=float, default=learning_rate, help='Distance model start learning rate. ' +
-                                                                                       'Default: {}'.format(
-                                                                                           learning_rate))
-    parser_build_library.add_argument('-di_lr_min', type=float, default=learning_rate_min,
-                                        help='Distance model minimum learning rate. ' +
+                                                                                       'Default: {}'.format(learning_rate))
+    parser_build_library.add_argument('-di_lr_min', type=float, default=learning_rate_min, help='Distance model minimum learning rate. ' +
                                              'Default: {}'.format(learning_rate_min))
-    parser_build_library.add_argument('-di_lr_decay', type=float, default=learning_rate_decay,
-                                      help='Distance learning rate decay. ' +
-                                           'Default: {}'.format(
-                                               learning_rate_decay))
+    parser_build_library.add_argument('-di_lr_decay', type=float, default=learning_rate_decay, help='Distance learning rate decay. ' +
+                                           'Default: {}'.format(learning_rate_decay))
 
 
     parser_build_library.set_defaults(func=build_library)

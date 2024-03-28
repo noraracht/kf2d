@@ -41,31 +41,9 @@ from utils import *
 from weight_inits import *
 
 
-
 # Hyper-parameters
-#input_size = 32896    # Canonical kmer count for k=8
-#input_size = 8192      # Canonical kmer count for k=7
-N = 10570             # Number of samples in dataset
-#hidden_size_fc1 = 4000
-hidden_size_fc1 = 2048
-#hidden_size_fc2 = 2000
-#embedding_size = 2 ** math.floor(math.log2(10 * N ** (1 / 2)))
-embedding_size = 1024
-start_epoch = 0
-#num_epochs = 8000
-batch_size = 16
-
-learning_rate = 0.0001           # 1e-4
-learning_rate_decay = 2000
-learning_rate_base = 0.1
-learning_rate_update_freq = 100
-
-
 features_scaler = 1e4
 
-train_test_split = 0.95
-weight_decay = 1e-5     # L2 regularization
-resume = False
 seed = 16
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
@@ -76,13 +54,6 @@ torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
 
 
 #### Dataset parameters ####
-
-
-
-params = {'batch_size': batch_size,
-          'shuffle': True,
-          'num_workers': 1}
-
 
 
 def classify_func(features_folder, feature_input, model_file, classification_result):
