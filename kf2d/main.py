@@ -685,7 +685,8 @@ def main():
 
     ### To invoke
     ### python main.py build_library -input_dir /Users/nora/PycharmProjects/train_tree_fna -output_dir /Users/nora/PycharmProjects/train_tree_output -size 2 -tree /Users/nora/PycharmProjects/test_tree.nwk -mode subtrees_only -cl_epochs 1 -di_epochs 1
-    ###
+
+    ### python main.py build_library -input_dir ../toy_example/train_tree_fna -output_dir ../toy_example/combo_models -size 2 -tree ../toy_example/train_tree_newick/train_tree.nwk -mode subtrees_only -cl_epochs 10 -di_epochs 1
 
     parser_build_library = subparsers.add_parser('build_library',
                                                    description='Wrapper command that combines subcommands: get_frequencies (from backbone sequences), divide_tree, get_distance, train_classifier and train_model_set')
@@ -750,6 +751,8 @@ def main():
 
     ### To invoke
     ### python main.py process_query_data -input_dir /Users/nora/PycharmProjects/test_freq -output_dir /Users/nora/PycharmProjects/test_tree_output  -classifier_model /Users/nora/PycharmProjects/train_tree_output -distance_model /Users/nora/PycharmProjects/train_tree_output
+
+    ### python main.py process_query_data -input_dir ../toy_example/test_fna -output_dir ../toy_example/combo_results   -classifier_model ../toy_example/combo_models -distance_model ../toy_example/combo_models
 
     parser_process_query_data = subparsers.add_parser('process_query_data',
                                          description='Wrapper command that combines subcommands: get_frequencies (from query samples), classify and query')
