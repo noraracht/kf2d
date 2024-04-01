@@ -46,16 +46,17 @@ from weight_inits import *
 # Hyper-parameters
 features_scaler = 1e4
 
-seed = 16
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
-# torch.backends.cudnn.benchmark = False
-# torch.backends.cudnn.deterministic = True
-# np.random.seed(seed)
 
 
-def query_func(features_folder, features_csv, model_file, classes, output_folder):
+def query_func(features_folder, features_csv, model_file, classes, seed, output_folder):
+
+    # Seed
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
+    # torch.backends.cudnn.benchmark = False
+    # torch.backends.cudnn.deterministic = True
+    # np.random.seed(seed)
 
     since = time.time()
 
@@ -79,6 +80,7 @@ def query_func(features_folder, features_csv, model_file, classes, output_folder
     logging.info('Query directory: {}'.format(features_folder))
     logging.info('Model directory: {}'.format(model_file))
     logging.info('Class information: {}'.format(classes))
+    logging.info('Seed: {}'.format(seed))
 
 
     #######################################################################

@@ -71,8 +71,10 @@ learning_rate = 0.00001     # 1e-5
 learning_rate_min = 3e-6    # 3e-6
 learning_rate_decay = 2000
 
+seed = 16
 
-__version__ = 'kf2d 1.0.19'
+
+__version__ = 'kf2d 1.0.20'
 
 
 # def print_hi(name):
@@ -258,7 +260,7 @@ def train_classifier(args):
     # Concatenate inputs into single dataframe
     #frame = construct_input_dataframe(li)
 
-    train_classifier_model_func(args.input_dir, frame, args.subtrees, args.e, args.hidden_sz, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.o)
+    train_classifier_model_func(args.input_dir, frame, args.subtrees, args.e, args.hidden_sz, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.seed, args.o)
 
 
 def classify(args):
@@ -285,7 +287,7 @@ def classify(args):
     # Concatenate inputs into single dataframe
     # frame = construct_input_dataframe(li)
 
-    classify_func(args.input_dir, frame, args.model, args.o)
+    classify_func(args.input_dir, frame, args.model, args.seed, args.o)
 
 
 def get_distances(args):
@@ -375,7 +377,7 @@ def train_model_set(args):
     # frame = construct_input_dataframe(li)
 
 
-    train_model_set_func(args.input_dir, frame, args.subtrees, args.true_dist, args.e, args.hidden_sz, args.embed_sz, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.o)
+    train_model_set_func(args.input_dir, frame, args.subtrees, args.true_dist, args.e, args.hidden_sz, args.embed_sz, args.batch_sz, args.lr, args.lr_min, args.lr_decay, args.seed, args.o)
 
 
 
@@ -396,7 +398,7 @@ def query(args):
     # Concatenate inputs into single dataframe
     # frame = construct_input_dataframe(li)
 
-    query_func(args.input_dir, frame, args.model, args.classes, args.o)
+    query_func(args.input_dir, frame, args.model, args.classes, args.seed, args.o)
 
 
 
@@ -430,6 +432,7 @@ def build_library(args):
     args.lr = args.cl_lr
     args.lr_min = args.cl_lr_min
     args.lr_decay = args.cl_lr_decay
+    args.seed = args.cl_seed
     args.o = args.output_dir
 
     train_classifier(args)
@@ -446,6 +449,7 @@ def build_library(args):
     args.lr = args.di_lr
     args.lr_min = args.di_lr_min
     args.lr_decay = args.di_lr_decay
+    args.seed = args.di_seed
     #args.o = args.output_dir # defined above
 
     train_model_set(args)
@@ -464,6 +468,7 @@ def process_query_data(args):
     print("\n==> Classifying query samples\n")
     args.input_dir = args.output_dir
     args.model = args.classifier_model
+    args.seed = args.cl_seed
     args.o = args.output_dir
 
     classify(args)
@@ -473,6 +478,7 @@ def process_query_data(args):
     # args.input_dir = args.output_dir # defined above
     args.model = args.distance_model
     args.classes = args.output_dir
+    args.seed = args.di_seed
     # args.o = args.output_dir # defined above
 
     query(args)
@@ -593,6 +599,8 @@ def main():
                                                                                         'Default: {}'.format(learning_rate_min))
     parser_trclas.add_argument('-lr_decay', type=float, default=learning_rate_decay, help='Learning rate decay. ' +
                                                                                       'Default: {}'.format(learning_rate_decay))
+    parser_trclas.add_argument('-seed', type=int, default=seed, help='Random seed. ' +
+                                                                            'Default: {}'.format(seed))
     parser_trclas.add_argument('-o',
                                help='Model output path')
 
@@ -612,6 +620,8 @@ def main():
                                help='Directory of input k-mer frequencies for queries samples: assemblies or reads (dir of .kf files for queries)')
     parser_classify.add_argument('-model',
                                help='Classification model')
+    parser_classify.add_argument('-seed', type=int, default=seed, help='Random seed. ' +
+                                                                     'Default: {}'.format(seed))
     parser_classify.add_argument('-o',
                                help='Output path')
 
@@ -649,6 +659,8 @@ def main():
                                                                          'Default: {}'.format(learning_rate_min))
     parser_train_model_set.add_argument('-lr_decay', type=float, default=learning_rate_decay, help='Learning rate decay. ' +
                                                                                           'Default: {}'.format(learning_rate_decay))
+    parser_train_model_set.add_argument('-seed', type=int, default=seed, help='Random seed. ' +
+                                                                       'Default: {}'.format(seed))
     parser_train_model_set.add_argument('-o',
                                help='Model output path')
 
@@ -671,6 +683,9 @@ def main():
                                         help='Directory of models and embeddings (dir of model_subtree_INDEX.ckpt and embeddings_subtree_INDEX.csv files for backbone)')
     parser_query.add_argument('-classes',
                                         help='Path to classification file with subtrees information obtained from classify command (classes.out file)')
+    parser_query.add_argument('-seed', type=int, default=seed, help='Random seed. ' +
+                                                                              'Default: {}'.format(seed))
+
     parser_query.add_argument('-o',
                                         help='Output path')
 
@@ -725,6 +740,8 @@ def main():
                                                                               'Default: {}'.format(learning_rate_min))
     parser_build_library.add_argument('-cl_lr_decay', type=float, default=learning_rate_decay, help='Classifier learning rate decay. ' +
                                              'Default: {}'.format(learning_rate_decay))
+    parser_build_library.add_argument('-cl_seed', type=int, default=seed, help='Classifier random seed. ' +
+                                                                    'Default: {}'.format(seed))
 
 
     parser_build_library.add_argument('-di_epochs', type=int, default=default_di_epochs, help='Number of epochs to train distance models. ' +
@@ -741,6 +758,8 @@ def main():
                                              'Default: {}'.format(learning_rate_min))
     parser_build_library.add_argument('-di_lr_decay', type=float, default=learning_rate_decay, help='Distance learning rate decay. ' +
                                            'Default: {}'.format(learning_rate_decay))
+    parser_build_library.add_argument('-di_seed', type=int, default=seed, help='Distance model random seed. ' +
+                                                                               'Default: {}'.format(seed))
 
 
     parser_build_library.set_defaults(func=build_library)
@@ -773,9 +792,13 @@ def main():
 
     parser_process_query_data.add_argument('-classifier_model',
                                  help='Classification model path')
+    parser_process_query_data.add_argument('-cl_seed', type=int, default=seed, help='Clssification random seed. ' +
+                                                                               'Default: {}'.format(seed))
 
     parser_process_query_data.add_argument('-distance_model',
                               help='Directory of models and embeddings (dir of model_subtree_INDEX.ckpt and embeddings_subtree_INDEX.csv files for backbone)')
+    parser_process_query_data.add_argument('-di_seed', type=int, default=seed, help='Query random seed. ' +
+                                                                                    'Default: {}'.format(seed))
 
 
     parser_process_query_data.set_defaults(func=process_query_data)

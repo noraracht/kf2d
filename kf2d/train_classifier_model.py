@@ -67,16 +67,18 @@ features_scaler = 1e4
 #train_test_split = 0.95
 #weight_decay = 1e-5     # L2 regularization
 #resume = False
-seed = 16
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
-# torch.backends.cudnn.benchmark = False
-# torch.backends.cudnn.deterministic = True
-# np.random.seed(seed)
 
 
-def train_classifier_model_func(features_folder, feature_input, clades_info, num_epochs, hidden_size_fc1, in_batch_sz, in_lr, in_lr_min, in_lr_decay, model_filepath):
+
+def train_classifier_model_func(features_folder, feature_input, clades_info, num_epochs, hidden_size_fc1, in_batch_sz, in_lr, in_lr_min, in_lr_decay, seed, model_filepath):
+
+    # Seed
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
+    # torch.backends.cudnn.benchmark = False
+    # torch.backends.cudnn.deterministic = True
+    # np.random.seed(seed)
 
     #### Dataset parameters ####
     params = {'batch_size': in_batch_sz,

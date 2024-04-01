@@ -44,16 +44,18 @@ from weight_inits import *
 # Hyper-parameters
 features_scaler = 1e4
 
-seed = 16
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
-# torch.backends.cudnn.benchmark = False
-# torch.backends.cudnn.deterministic = True
-# np.random.seed(seed)
 
 
-def classify_func(features_folder, feature_input, model_file, classification_result):
+def classify_func(features_folder, feature_input, model_file, seed, classification_result):
+
+    # Seed
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
+    # torch.backends.cudnn.benchmark = False
+    # torch.backends.cudnn.deterministic = True
+    # np.random.seed(seed)
+
 
     since = time.time()
 
@@ -78,6 +80,7 @@ def classify_func(features_folder, feature_input, model_file, classification_res
 
     logging.info('Feature directory: {}'.format(features_folder))
     logging.info('Model: {}'.format(model_file))
+    logging.info('Seed: {}'.format(seed))
 
 
     #######################################################################
